@@ -1,0 +1,61 @@
+--Funkcja z parametrami prostymi obliczaj¹ca podwy¿kê ceny danego kursu z numerem 
+--identyfikacyjnym kursu i wielkoœci¹ podwy¿ki w postaci parametrów.
+--CREATE FUNCTION Podwyzka(@id_oferty int, @pod float)
+--returns int
+--as
+--begin
+--declare @nowacena int
+--select @nowacena=cena*(1+@pod)
+--from oferta where @id_oferty=id_oferty
+--return @nowacena
+--end
+--select [dbo].[Podwyzka]('1','0.05') as 'Nowa Cena';
+
+--Funkcja z parametrem prostym licz¹ca jaki procent utargu ca³kowitego stanowi utarg
+--z kursu zadanego w parametrze
+--CREATE FUNCTION Udzial(@id int)
+--returns float
+--as
+--begin
+--declare @budzet_dz int
+--declare @budzet int
+--select @budzet_dz=sum(cena) from oferta as ofe
+--INNER JOIN  kurs k
+--INNER JOIN ocena o 
+--INNER JOIN uczestnik u
+--ON u.id_uczestnika=o.id_uczestnika
+--ON o.id_kursu=k.id_kursu
+--ON k.id_oferty=ofe.id_oferty
+--where @id=ofe.id_oferty
+--group by ofe.nazwa, ofe.cena,
+--k.id_oferty, ofe.id_oferty;
+--select @budzet = sum(cena) from oferta as ofe
+--INNER JOIN  kurs k
+--INNER JOIN ocena o 
+--INNER JOIN uczestnik u
+--ON u.id_uczestnika=o.id_uczestnika
+--ON o.id_kursu=k.id_kursu
+--ON k.id_oferty=ofe.id_oferty
+--return round(@budzet_dz*100.00/(@budzet),2) 
+--end;
+
+--select dbo.Udzial('2') as 'Udzial%';
+
+--Funkcja z wartoœci¹ zwracan¹ jako tabela wyœwietlaj¹ca nazwiska i oceny osób z 
+--najwy¿szymi ocenami, ich iloœæ zadana w parametrze.
+--CREATE FUNCTION Ranking(@top int)
+--RETURNS @ranking table (
+--imie varchar(25),
+--nazwisko varchar(25),
+--ocena float
+--)
+--as 
+--begin
+--insert @ranking
+--select top(@top) u.imie, u.nazwisko, o.ocena
+--from uczestnik as u, ocena as o
+--where o.id_uczestnika=u.id_uczestnika
+--order by ocena desc
+--return 
+--end
+--select * from Ranking(6)
